@@ -1,0 +1,63 @@
+var gulp = require('gulp');
+var sass = require('gulp-sass');
+var autoprefixer = require('gulp-autoprefixer');
+var browserSync = require('browser-sync').create();
+const eslint = require('gulp-eslint');
+const {src, task} = require('gulp');
+var jasmine = require('gulp-jasmine-phantom');
+
+gulp.task('styles', function(done) {
+	gulp.src('sass/**/*.scss')
+		.pipe(sass().on('error', sass.logError))
+		.pipe(autoprefixer({
+			browsers: ['last 2 versions']
+		}))
+		.pipe(gulp.dest('./css'));
+    done();
+});
+
+gulp.task('browserSync', function(done) {
+  browserSync.init({
+    port: 8000,	  
+    server: {
+      baseDir: '.'	    
+    },
+  });
+  done();
+});
+
+
+gulp.task('lint', function() {
+  return gulp.src('./js/**/*.js').pipe(eslint({
+    'rules':{
+        'quotes': [1, 'single'],
+        'semi': [1, 'always']
+    }
+  }))
+  .pipe(eslint.format())
+  // Brick on failure to be super strict
+  .pipe(eslint.failOnError());
+});
+
+gulp.task('integrationTests', function() {
+  return gulp.src('spec/test.js')
+          .pipe(jasmine({
+            integration: true,
+            vendor: 'js/**/*.js'
+          }));
+});
+
+gulp.task('default', gulp.series('browserSync', 'styles'), function(done){
+	gulp.watch('./*.html', browserSync.reload); 
+  	gulp.watch('./js/**/*.js', browserSync.reload);
+  	gulp.watch('./css/**/*.css', browserSync.reload); 
+  	//gulp.watch('./js/**/*.js', lint);
+  	done(); 
+});
+// gulp.task('default', function() {
+// 	return new Promise(function(resolve, reject) {
+// 		console.log('hello world!');
+// 		console.log('MIKII!!!');
+// 		resolve();
+// 	});
+// });
