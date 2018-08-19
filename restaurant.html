@@ -36,11 +36,11 @@
   <main id="maincontent">
     <!-- Beginning map -->
     <section id="map-container">
-      <div id="map" role="application"></div>
+      <div tabindex="-1" id="map" role="application"></div>
     </section>
     <!-- End map -->
     <!-- Beginning restaurant -->
-    <section id="restaurant-container">
+    <section tabindex="0" id="restaurant-container">
       <h2 id="restaurant-name"></h1>
       <img id="restaurant-img">
       <p id="restaurant-cuisine"></p>
@@ -49,7 +49,7 @@
     </section>
     <!-- end restaurant -->
     <!-- Beginning reviews -->
-    <section id="reviews-container">
+    <section tabindex="0" id="reviews-container">
       <ul id="reviews-list" role="list"></ul>
     </section>
     <!-- End reviews -->
